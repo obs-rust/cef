@@ -28,8 +28,11 @@ All `obs-studio-libs` commits are on its `main` branch.
 
 Release published 2026-10-13. The six archives are **byte-for-byte copies of
 the CEF 7871 archives that obs-studio fetches from
-`https://cdn-fastly.obsproject.com/downloads`**; each sha256 matches the hash
-pinned in obs-rust/obs-studio's `CMakePresets.json`. See obs-rust/obs-studio#614.
+`https://cdn-fastly.obsproject.com/downloads`**; five of the six sha256s are
+the hashes obs-rust/obs-studio's `CMakePresets.json` still pins for 7871. The
+sixth, `cef_binary_7871_linux_x86_64.tar.xz`, is no longer pinned there: that
+platform now builds from the `8078-r2` archive (`dc463c…`), so its 7871 hash is
+recorded here alone. See obs-rust/obs-studio#614.
 
 Because these are an upstream binary redistribution, there is no obs-rust
 recipe and no upstream CEF commit recorded here: the CEF version is 7871
@@ -50,7 +53,9 @@ from here beyond the sha256.
 
 Release published 2026-10-23. Built from upstream CEF branch **8078** with
 proprietary codecs (`proprietary_codecs=true ffmpeg_branding=Chrome`, so
-H.264/AAC play in browser sources) and `symbol_level=1 chrome_pgo_phase=0`.
+H.264/AAC play in browser sources) and `symbol_level=0 chrome_pgo_phase=0`, so
+this archive has no line tables; `8078-r2` below is the same CEF rebuilt with
+`symbol_level=1` for sources.
 
 - Upstream source: `chromiumembedded/cef` @
   `426920c33ef22551e0b8f48cf343d623ac25642d`
@@ -67,8 +72,10 @@ H.264/AAC play in browser sources) and `symbol_level=1 chrome_pgo_phase=0`.
 
 ## `8078` — macOS arm64 / x86_64 (built by @nathan-v)
 
-Same upstream commit and codec flags, `symbol_level=1 chrome_pgo_phase=0`; the
-sandbox library is kept in the framework. Built by **@nathan-v on his own Apple
+Same upstream commit and codec flags. The symbol level of these two archives is
+**not recorded** here: the macOS recipe that sets `symbol_level=1` postdates
+them (note 2 below), and the builder's report did not state it. The sandbox
+library is kept in the framework. Built by **@nathan-v on his own Apple
 Silicon Mac** and published here by the maintainer; hashes were verified against
 the builder's report and the archive contents were spot-checked (framework,
 `libcef_sandbox.dylib`, `libcef_dll_wrapper.a`, per-archive Mach-O

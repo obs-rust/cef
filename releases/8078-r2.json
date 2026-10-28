@@ -1,0 +1,44 @@
+{
+  "tag": "8078-r2",
+  "release_title": "CEF 8078 (Chromium 156) Linux x86_64, with line tables (symbol_level=1), built by obs-rust (binary, not a source release)",
+  "published": "2026-10-26",
+  "kind": "prebuilt-binary",
+  "record": "provenance",
+  "source": {
+    "upstream_repo": "chromiumembedded/cef",
+    "upstream_commit": "426920c33ef22551e0b8f48cf343d623ac25642d",
+    "cef_branch": "8078",
+    "chromium": "156.0.8078.48",
+    "cef_version_string": "156.0.8+g426920c+chromium-156.0.8078.48",
+    "upstream_note": "The Linux recipe tracks the moving upstream branch (--branch=8078, no --checkout); this commit is read from the CEF_VERSION string inside the archive."
+  },
+  "patch_commit": null,
+  "patch_note": "No recipe applies a patch from any branch of this repository.",
+  "assets": [
+    {
+      "name": "cef_binary_8078_linux_x86_64.tar.xz",
+      "sha256": "dc463c360d4b8e4eb482fa78a5b92b996b053a4a8650dba3052c89390430ac9c",
+      "size_bytes": 272413736,
+      "platform": "linux",
+      "arch": "x86_64",
+      "builder": "obs-rust container (bosn jobs 23 build, 31 pack)",
+      "symbol_level": 1,
+      "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
+      "recipe": {
+        "repo": "obs-rust/obs-studio-libs",
+        "path": "recipes/cef/linux",
+        "commit": "75bdc03",
+        "note": "cef: Build 8078 with line tables (symbol_level=1) (#13), 2026-10-25"
+      }
+    }
+  ],
+  "gaps": [
+    "The Linux recipe pins a branch, not a commit: the built revision is known only from the CEF_VERSION string inside the archive.",
+    "No source tarball (cef.tar.gz) is attached to this release."
+  ],
+  "references": [
+    "https://github.com/obs-rust/cef/blob/6533-fix-stutter-and-osr-extra-info/PROVENANCE.md",
+    "https://github.com/obs-rust/obs-studio/issues/2363",
+    "https://github.com/obs-rust/obs-studio/issues/2674"
+  ]
+}

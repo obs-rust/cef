@@ -160,12 +160,29 @@ Recorded here so the gap is visible, not hidden:
    pre-merge (uncommitted) script content. The arm64 archive is attributed to
    `44f2099`; the x86_64 archive is recorded against `44f2099` as the closest
    named revision with that caveat.
-3. **No published archive carries a patch from a branch of this repository.**
-   Every recipe calls `automate-git.py` and nothing else. If the OBS-specific
-   patches that this fork exists for must be present in the shipped CEF, the
-   recipe needs a pinned patch step against a commit here; if they are not
-   needed, that should be stated and this question closed
-   (obs-rust/obs-studio#2674).
-4. **No source tarball is attached.** `automate-git.py` writes a `cef.tar.gz`
-   for the build; whether it still exists for any published build is not
-   recorded here.
+3. **No published archive carries a patch from a branch of this repository,
+   and none is needed — answered (#2674).** Every recipe calls
+   `automate-git.py` and nothing else. The only header change the fork's
+   branches make that `plugins/obs-browser` can consume is
+   `CEF_ON_ACCELERATED_PAINT2` / `OnAcceleratedPaint2` (commit `8092a57fc`
+   and the `on-accelerated-paint2`/`MediaHandler`/`hack-and-a-half`/
+   `jim-system-freeze-workaround` branches). Checked against both shipped
+   releases: the `7871` archive's `include/cef_render_handler.h` declares only
+   upstream's `OnAcceleratedPaint` (CEF 6367+), and upstream
+   `chromiumembedded/cef@426920c33ef22551e0b8f48cf343d623ac25642d` — the
+   `8078` source — is the same. Neither defines `CEF_ON_ACCELERATED_PAINT2`
+   nor declares `OnAcceleratedPaint2`, so the fork's patch is in neither
+   archive. `7871` did not carry it either, so its absence from `8078` is not
+   a regression. `obs-browser` at `434cc38` compiles its
+   `OnAcceleratedPaint2` override only when that macro is defined, so both
+   releases take the upstream shared-texture path. If the fork's patches are
+   ever wanted in the shipped CEF, the recipe needs a pinned patch step
+   against a commit here; until then this question is closed.
+4. **No source tarball is attached, and none was retained — answered
+   (#2674).** `automate-git.py` writes a `cef.tar.gz` into its build output.
+   The `7871` archives are byte-for-byte copies of upstream OBS's published
+   binaries, so no tarball was fetched or produced here. The `8078` Linux
+   builds ran in bosn container jobs 23 (build) and 31 (pack) and the macOS
+   builds on a contributor's machine; neither build output was retained, so no
+   `cef.tar.gz` survives to attach. Publishing one now would require a
+   rebuild, which this record deliberately does not claim.

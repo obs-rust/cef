@@ -1,0 +1,75 @@
+{
+  "tag": "8078",
+  "release_title": "CEF 8078 (Chromium 156) Linux x86_64, built by obs-rust (binary, not a source release)",
+  "published": "2026-10-23",
+  "kind": "prebuilt-binary",
+  "record": "provenance",
+  "source": {
+    "upstream_repo": "chromiumembedded/cef",
+    "upstream_commit": "426920c33ef22551e0b8f48cf343d623ac25642d",
+    "cef_branch": "8078",
+    "chromium": "156.0.8078.48",
+    "cef_version_string": "156.0.8+g426920c+chromium-156.0.8078.48",
+    "upstream_note": "The Linux recipe tracks the moving upstream branch (--branch=8078, no --checkout); this commit is read from the CEF_VERSION string inside the archive, not from the recipe."
+  },
+  "patch_commit": null,
+  "patch_note": "No recipe applies a patch from any branch of this repository. The fork's OBS-specific patches are therefore not in these archives; whether that is correct for obs-browser is open on obs-rust/obs-studio#2674.",
+  "assets": [
+    {
+      "name": "cef_binary_8078_linux_x86_64.tar.xz",
+      "sha256": "fb36df11bc8280c9cb666732becc1fe267f833bb964dbb13d69cad33488171dc",
+      "platform": "linux",
+      "arch": "x86_64",
+      "builder": "obs-rust container",
+      "symbol_level": 0,
+      "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=0 chrome_pgo_phase=0",
+      "recipe": {
+        "repo": "obs-rust/obs-studio-libs",
+        "path": "recipes/cef/linux",
+        "commit": "e653bfb",
+        "note": "CEF 8078 Linux x86_64 recipe with proprietary codecs (#11), 2026-10-23"
+      }
+    },
+    {
+      "name": "cef_binary_8078_macos_arm64.tar.xz",
+      "sha256": "2ddd78dd796af956728984747aaba4d859658354f00c6035be975b9f322f95cb",
+      "platform": "macos",
+      "arch": "arm64",
+      "builder": "@nathan-v on his own Apple Silicon Mac",
+      "symbol_level": null,
+      "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
+      "recipe": {
+        "repo": "obs-rust/obs-studio-libs",
+        "path": "recipes/cef/macos",
+        "commit": "5d80772",
+        "note": "Closest named revision: the macOS recipe postdates these archives (first appears at 44f2099, 2026-10-26). The archives cannot be attributed to a specific obs-studio-libs commit."
+      }
+    },
+    {
+      "name": "cef_binary_8078_macos_x86_64.tar.xz",
+      "sha256": "75281c862a59321bf83735926efeafed20e816cfa07fcccdf20a2d1748c539d0",
+      "platform": "macos",
+      "arch": "x86_64",
+      "builder": "@nathan-v on his own Apple Silicon Mac",
+      "symbol_level": null,
+      "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
+      "recipe": {
+        "repo": "obs-rust/obs-studio-libs",
+        "path": "recipes/cef/macos",
+        "commit": "5d80772",
+        "note": "Closest named revision: the macOS recipe postdates these archives (first appears at 44f2099, 2026-10-26)."
+      }
+    }
+  ],
+  "gaps": [
+    "The Linux recipe pins a branch, not a commit: the built revision is known only from the CEF_VERSION string inside the archive.",
+    "The macOS archives' symbol level is not recorded, and the macOS recipe postdates them.",
+    "No source tarball (cef.tar.gz) is attached to this release.",
+    "The macOS archives are pinned by hash, not by an attested build run; the builder's identity was validated by the maintainer on the OBS Rust Discord (obs-rust/obs-studio#2418)."
+  ],
+  "references": [
+    "https://github.com/obs-rust/cef/blob/6533-fix-stutter-and-osr-extra-info/PROVENANCE.md",
+    "https://github.com/obs-rust/obs-studio/issues/2418",
+    "https://github.com/obs-rust/obs-studio/issues/2674"
+  ]
+}

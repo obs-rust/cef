@@ -7,9 +7,19 @@ no named source is a pin you cannot repeat.
 
 For every published archive it records the upstream CEF commit it was built
 from, the recipe (repo + commit) that produced it, whether any patch from a
-branch of *this* repository is applied, and the archive's sha256. A release tag
-in this repository is only a GitHub-required target and carries no build
-information; the source of truth is this file and the release body.
+branch of *this* repository is applied, and the archive's sha256.
+
+The same record exists in machine-readable form, one file per release, under
+[`releases/`](releases). Each release tag points at the commit that adds its own
+file, so the record for a release is readable from the tag itself:
+
+```sh
+git show 8078:releases/8078.json
+```
+
+A tag never resolves to a commit that is not that release's record. `7871` was
+a mirror of an upstream archive and its manifest says so rather than naming a
+source commit it cannot name.
 
 ## Summary
 

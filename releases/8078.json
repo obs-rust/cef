@@ -69,6 +69,12 @@
         "ninja": "[58097/58100] 1h19m50.43s F COPY_BUNDLE_DATA 'Chromium Embedded Framework.framework' 'cefclient.app/Contents/Frameworks/Chromium Embedded Framework.framework'\nbuild finished\nnoexec:580 local:57518 remote:0 cache:0 skip:39396\n1h19m50.83s Build Succeeded: 58098 steps - 12.13/s",
         "wrapper": "Built afterwards with -DPROJECT_ARCH=arm64, deployment target 13.0, MacOSX 27.0 SDK and CEF_USE_SANDBOX; lipo reports the framework and libcef_sandbox.dylib as non-fat; the tar is the minimal distribution; the dSYM directory was removed before packing.",
         "codesign": "Ad-hoc, linker-signed: flags=0x20002(adhoc,linker-signed), Signature=adhoc, CDHash a9653e25241db1abcfccf4493d68f6395772e05e (framework) and b0e76d8e769094df075f8705fd936928d3c45c90 (libcef_sandbox.dylib); VersionMin 851968 (macOS 13.0), VersionSDK 1769472 (27.0 SDK)."
+      },
+      "sandbox": {
+        "library": "libcef_sandbox.dylib is present inside 'Chromium Embedded Framework.framework' in this archive (the tar matches the sha256 above); macOS uses the dynamic sandbox library, not the Windows static cef_sandbox library.",
+        "wrapper": "libcef_dll_wrapper built with CEF_USE_SANDBOX.",
+        "cef_version_header": "include/cef_version.h carries CEF_SANDBOX_COMPAT_HASH \"\" in this archive.",
+        "compat_hash_note": "Empty is correct for macOS, not a value that failed to bake in: cef/BUILD.gn's make_version_header action adds --sandbox-files only inside if (is_win) (chrome_elf_main.h, sandbox/policy/mojom/sandbox.mojom, sandbox/win/src/sandbox.h, sandbox/win/src/sandbox_types.h), and tools/make_version_header.py substitutes \"\" when no sandbox files are passed. The only consumer of a non-empty value is the Windows bootstrap loader (libcef_dll/wrapper/cef_scoped_library_loader_win.cc), which compares the bootstrap EXE against libcef.dll. Reported by the builder on obs-rust/obs-studio#2418 and checked against chromiumembedded/cef."
       }
     },
     {
@@ -113,6 +119,12 @@
         "ninja": "[95294/95297] 2h21m24.90s F COPY_BUNDLE_DATA 'Chromium Embedded Framework.framework' 'cefclient.app/Contents/Frameworks/Chromium Embedded Framework.framework'\nbuild finished\nnoexec:742 local:94553 remote:0 cache:0 skip:53013\n2h21m25.68s Build Succeeded: 95295 steps - 11.23/s",
         "wrapper": "Built afterwards with -DPROJECT_ARCH=x86_64, deployment target 13.0, MacOSX 27.0 SDK and CEF_USE_SANDBOX; lipo reports the framework and libcef_sandbox.dylib as non-fat; the tar is the minimal distribution; the dSYM directory was removed before packing.",
         "codesign": "Not signed at all: the framework, its inner binary, libcef_sandbox.dylib and both libcef_dll_wrapper.a report 'code object is not signed at all'. That asymmetry is the toolchain (ld64 ad-hoc signs arm64 output because Apple silicon requires it, and imposes no such requirement on x86_64), not a skipped signing step."
+      },
+      "sandbox": {
+        "library": "libcef_sandbox.dylib is present inside 'Chromium Embedded Framework.framework' in this archive (the tar matches the sha256 above); macOS uses the dynamic sandbox library, not the Windows static cef_sandbox library.",
+        "wrapper": "libcef_dll_wrapper built with CEF_USE_SANDBOX.",
+        "cef_version_header": "include/cef_version.h carries CEF_SANDBOX_COMPAT_HASH \"\" in this archive.",
+        "compat_hash_note": "Empty is correct for macOS, not a value that failed to bake in: cef/BUILD.gn's make_version_header action adds --sandbox-files only inside if (is_win) (chrome_elf_main.h, sandbox/policy/mojom/sandbox.mojom, sandbox/win/src/sandbox.h, sandbox/win/src/sandbox_types.h), and tools/make_version_header.py substitutes \"\" when no sandbox files are passed. The only consumer of a non-empty value is the Windows bootstrap loader (libcef_dll/wrapper/cef_scoped_library_loader_win.cc), which compares the bootstrap EXE against libcef.dll. Reported by the builder on obs-rust/obs-studio#2418 and checked against chromiumembedded/cef."
       }
     }
   ],

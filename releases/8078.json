@@ -36,13 +36,39 @@
       "platform": "macos",
       "arch": "arm64",
       "builder": "@nathan-v on his own Apple Silicon Mac",
-      "symbol_level": null,
+      "symbol_level": 1,
       "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
       "recipe": {
         "repo": "obs-rust/obs-studio-libs",
         "path": "recipes/cef/macos",
-        "commit": "5d80772",
-        "note": "Closest named revision: the macOS recipe postdates these archives (first appears at 44f2099, 2026-10-26). The archives cannot be attributed to a specific obs-studio-libs commit."
+        "commit": "44f2099",
+        "note": "Matches #17 (44f2099, 2026-10-26); the build log's environment is that commit's. The archives were packed before #18 (5d80772) merged."
+      },
+      "chromium_commit": "d0c02bfad08ec92a6ffcf989e53cd995e6381a4c",
+      "chromium_commit_note": "refs/tags/156.0.8078.48",
+      "build": {
+        "host": "Apple Silicon Mac (builder's own machine)",
+        "xcode": "27.0 (27A266a)",
+        "gn_defines": "is_official_build=true proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
+        "automate_git_args": [
+          "--download-dir=\"$WORK\"",
+          "--branch=8078",
+          "--checkout=426920c33ef22551e0b8f48cf343d623ac25642d",
+          "--no-chromium-history",
+          "--no-debug-build",
+          "--arm64-build",
+          "--no-update",
+          "--force-build",
+          "--minimal-distrib",
+          "--minimal-distrib-only",
+          "--no-distrib-archive",
+          "--build-target=cefclient"
+        ],
+        "extra_env": {},
+        "args_gn": "alternate_cdm_storage_id_key=\"968b476909da4373b08903c28e859454\"\nchrome_pgo_phase=0\nclang_use_chrome_plugins=false\ndisable_fieldtrial_testing_config=true\nenable_background_mode=false\nenable_cdm_host_verification=true\nenable_cdm_storage_id=true\nenable_downgrade_processing=false\nenable_precompiled_headers=false\nenable_resource_allowlist_generation=false\nenable_rlz=true\nenable_widevine=true\nffmpeg_branding=\"Chrome\"\nforbid_non_component_debug_builds=false\nis_component_build=false\nis_debug=false\nis_official_build=true\noptimize_webui=true\nproprietary_codecs=true\nsymbol_level=1\ntarget_cpu=\"arm64\"",
+        "ninja": "[58097/58100] 1h19m50.43s F COPY_BUNDLE_DATA 'Chromium Embedded Framework.framework' 'cefclient.app/Contents/Frameworks/Chromium Embedded Framework.framework'\nbuild finished\nnoexec:580 local:57518 remote:0 cache:0 skip:39396\n1h19m50.83s Build Succeeded: 58098 steps - 12.13/s",
+        "wrapper": "Built afterwards with -DPROJECT_ARCH=arm64, deployment target 13.0, MacOSX 27.0 SDK and CEF_USE_SANDBOX; lipo reports the framework and libcef_sandbox.dylib as non-fat; the tar is the minimal distribution; the dSYM directory was removed before packing.",
+        "codesign": "Ad-hoc, linker-signed: flags=0x20002(adhoc,linker-signed), Signature=adhoc, CDHash a9653e25241db1abcfccf4493d68f6395772e05e (framework) and b0e76d8e769094df075f8705fd936928d3c45c90 (libcef_sandbox.dylib); VersionMin 851968 (macOS 13.0), VersionSDK 1769472 (27.0 SDK)."
       }
     },
     {
@@ -51,19 +77,49 @@
       "platform": "macos",
       "arch": "x86_64",
       "builder": "@nathan-v on his own Apple Silicon Mac",
-      "symbol_level": null,
+      "symbol_level": 1,
       "gn_defines": "proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
       "recipe": {
         "repo": "obs-rust/obs-studio-libs",
         "path": "recipes/cef/macos",
-        "commit": "5d80772",
-        "note": "Closest named revision: the macOS recipe postdates these archives (first appears at 44f2099, 2026-10-26)."
+        "commit": "44f2099",
+        "note": "Closest named revision: #17 (44f2099), on main before the ninja run. The x86_64 log's CEF_ENABLE_AMD64=1 and GN_OUT_CONFIGS=Release_GN_x64 exports only appear in the recipe at #18 (5d80772), which merged after both archives were packed, so that run used pre-merge script content and cannot be attributed to a committed recipe exactly."
+      },
+      "chromium_commit": "d0c02bfad08ec92a6ffcf989e53cd995e6381a4c",
+      "chromium_commit_note": "refs/tags/156.0.8078.48",
+      "build": {
+        "host": "Apple Silicon Mac (builder's own machine)",
+        "xcode": "27.0 (27A266a)",
+        "gn_defines": "is_official_build=true proprietary_codecs=true ffmpeg_branding=Chrome symbol_level=1 chrome_pgo_phase=0",
+        "automate_git_args": [
+          "--download-dir=\"$WORK\"",
+          "--branch=8078",
+          "--checkout=426920c33ef22551e0b8f48cf343d623ac25642d",
+          "--no-chromium-history",
+          "--no-debug-build",
+          "--x64-build",
+          "--no-update",
+          "--force-build",
+          "--minimal-distrib",
+          "--minimal-distrib-only",
+          "--no-distrib-archive",
+          "--build-target=cefclient"
+        ],
+        "extra_env": {
+          "CEF_ENABLE_AMD64": "1",
+          "GN_OUT_CONFIGS": "Release_GN_x64"
+        },
+        "args_gn": "alternate_cdm_storage_id_key=\"968b476909da4373b08903c28e859454\"\nchrome_pgo_phase=0\nclang_use_chrome_plugins=false\ndisable_fieldtrial_testing_config=true\nenable_background_mode=false\nenable_cdm_host_verification=true\nenable_cdm_storage_id=true\nenable_downgrade_processing=false\nenable_precompiled_headers=false\nenable_resource_allowlist_generation=false\nenable_rlz=true\nenable_widevine=true\nffmpeg_branding=\"Chrome\"\nforbid_non_component_debug_builds=false\nis_component_build=false\nis_debug=false\nis_official_build=true\noptimize_webui=true\nproprietary_codecs=true\nsymbol_level=1\ntarget_cpu=\"x64\"",
+        "ninja": "[95294/95297] 2h21m24.90s F COPY_BUNDLE_DATA 'Chromium Embedded Framework.framework' 'cefclient.app/Contents/Frameworks/Chromium Embedded Framework.framework'\nbuild finished\nnoexec:742 local:94553 remote:0 cache:0 skip:53013\n2h21m25.68s Build Succeeded: 95295 steps - 11.23/s",
+        "wrapper": "Built afterwards with -DPROJECT_ARCH=x86_64, deployment target 13.0, MacOSX 27.0 SDK and CEF_USE_SANDBOX; lipo reports the framework and libcef_sandbox.dylib as non-fat; the tar is the minimal distribution; the dSYM directory was removed before packing.",
+        "codesign": "Not signed at all: the framework, its inner binary, libcef_sandbox.dylib and both libcef_dll_wrapper.a report 'code object is not signed at all'. That asymmetry is the toolchain (ld64 ad-hoc signs arm64 output because Apple silicon requires it, and imposes no such requirement on x86_64), not a skipped signing step."
       }
     }
   ],
   "gaps": [
     "The Linux recipe pins a branch, not a commit: the built revision is known only from the CEF_VERSION string inside the archive.",
-    "The macOS archives' symbol level is not recorded, and the macOS recipe postdates them.",
+    "The macOS x86_64 log's CEF_ENABLE_AMD64=1 and GN_OUT_CONFIGS=Release_GN_x64 exports only exist in the recipe at 5d80772 (#18), which merged after both archives were packed; the run used pre-merge script content.",
+    "The macOS archives carry symbol_level=1 but no dSYM (the directory was removed before packing), so line tables are present in the binaries and there are no separate debug-symbol archives.",
     "No source tarball (cef.tar.gz) is attached to this release.",
     "The macOS archives are pinned by hash, not by an attested build run; the builder's identity was validated by the maintainer on the OBS Rust Discord (obs-rust/obs-studio#2418)."
   ],

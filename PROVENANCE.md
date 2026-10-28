@@ -27,7 +27,7 @@ source commit it cannot name.
 |---|---|---|---|---|---|
 | `7871` | linux x86_64/aarch64, macOS x86_64/arm64, windows x64/arm64 | upstream OBS (mirror) | CEF 7871 / Chromium 150 — upstream binary, commit not recorded | none applied | none (mirror) |
 | `8078` | linux x86_64 | obs-rust (container) | `chromiumembedded/cef` @ `426920c33ef22551e0b8f48cf343d623ac25642d` (`156.0.8+g426920c+chromium-156.0.8078.48`) | none applied | `recipes/cef/linux` @ `e653bfb` |
-| `8078` | macOS arm64, macOS x86_64 | @nathan-v (own Apple Silicon Mac) | `chromiumembedded/cef` @ `426920c33ef22551e0b8f48cf343d623ac25642d` | none applied | `recipes/cef/macos` (see note) |
+| `8078` | macOS arm64, macOS x86_64 | @nathan-v (own Apple Silicon Mac) | `chromiumembedded/cef` @ `426920c33ef22551e0b8f48cf343d623ac25642d` (Chromium `156.0.8078.48` @ `d0c02bfa`) | none applied | `recipes/cef/macos` @ `44f2099` (arm64; x86_64 see note) |
 | `8078-r2` | linux x86_64 | obs-rust (container) | `chromiumembedded/cef` @ `426920c33ef22551e0b8f48cf343d623ac25642d` | none applied | `recipes/cef/linux` @ `75bdc03` |
 
 All `obs-studio-libs` commits are on its `main` branch.
@@ -82,22 +82,37 @@ this archive has no line tables; `8078-r2` below is the same CEF rebuilt with
 
 ## `8078` — macOS arm64 / x86_64 (built by @nathan-v)
 
-Same upstream commit and codec flags. The symbol level of these two archives is
-**not recorded** here: the macOS recipe that sets `symbol_level=1` postdates
-them (note 2 below), and the builder's report did not state it. The sandbox
-library is kept in the framework. Built by **@nathan-v on his own Apple
-Silicon Mac** and published here by the maintainer; hashes were verified against
-the builder's report and the archive contents were spot-checked (framework,
-`libcef_sandbox.dylib`, `libcef_dll_wrapper.a`, per-archive Mach-O
-architecture). The builder's identity was validated by the maintainer
-(obs-rust/obs-studio#2418).
+Same upstream commit and codec flags. Both archives set `symbol_level=1`
+(`is_official_build=true proprietary_codecs=true ffmpeg_branding=Chrome
+symbol_level=1 chrome_pgo_phase=0`), read from the `args.gn` each build printed,
+so line tables are present in the binaries. The dSYM directory was removed
+before packing, so no separate debug-symbol archive is attached. The sandbox
+library is kept in the framework. Built by **@nathan-v on his own Apple Silicon
+Mac** (Xcode 27.0, 27A266a) and published here by the maintainer; hashes were
+verified against the builder's report and the release's own digests, and the
+archive contents were spot-checked (framework, `libcef_sandbox.dylib`,
+`libcef_dll_wrapper.a`, per-archive Mach-O architecture). The builder's identity
+was validated by the maintainer (obs-rust/obs-studio#2418).
 
 - Upstream source: `chromiumembedded/cef` @
-  `426920c33ef22551e0b8f48cf343d623ac25642d`.
-- Recipe: `recipes/cef/macos/build.sh` in obs-rust/obs-studio-libs — see the
-  note below; it was committed after these archives were built.
+  `426920c33ef22551e0b8f48cf343d623ac25642d`; Chromium `refs/tags/156.0.8078.48`
+  @ `d0c02bfad08ec92a6ffcf989e53cd995e6381a4c`.
+- Recipe: `recipes/cef/macos/build.sh` in obs-rust/obs-studio-libs @ `44f2099`
+  (*"CEF 8078 macOS recipe"*, #17, 2026-10-26) — the arm64 build's log
+  environment matches that commit. See the note below for the x86_64 run.
 - Patch commit in use: **none.** The recipe runs `automate-git.py` against
-  upstream CEF only.
+  upstream CEF only. The invocation is `--branch=8078
+  --checkout=426920c33ef22551e0b8f48cf343d623ac25642d --no-chromium-history
+  --no-debug-build --arm64-build|--x64-build --no-update --force-build
+  --minimal-distrib --minimal-distrib-only --no-distrib-archive
+  --build-target=cefclient`; the x86_64 run also exports `CEF_ENABLE_AMD64=1`
+  and `GN_OUT_CONFIGS=Release_GN_x64`.
+- Codesign: the arm64 framework and `libcef_sandbox.dylib` are ad-hoc
+  linker-signed (`flags=0x20002(adhoc,linker-signed)`, `Signature=adhoc`,
+  `VersionMin` 851968 = macOS 13.0, `VersionSDK` 1769472 = 27.0 SDK); the
+  x86_64 framework, its inner binary and `libcef_sandbox.dylib` report `code
+  object is not signed at all`. That asymmetry is ld64's arm64 requirement, not
+  a skipped signing step.
 - These are the only published archives not built on obs-rust infrastructure,
   and they are pinned by hash rather than by an attested build run.
 
@@ -136,12 +151,15 @@ Recorded here so the gap is visible, not hidden:
    (`426920c33ef22551e0b8f48cf343d623ac25642d`) is known only because the CEF
    version string inside the archive names it. The macOS recipe pins
    `CHECKOUT=426920c…` explicitly and is reproducible from the recipe alone.
-2. **The macOS recipe postdates the macOS archives.** `recipes/cef/macos/`
-   first appears at `44f2099` (2026-10-26, #17) and was revised at `5d80772`
-   (#18), while the `8078` macOS archives were built by @nathan-v from his
-   working recipe of that time. The archives therefore cannot be attributed to
-   a specific `obs-studio-libs` commit; the recipe at `5d80772` is the closest
-   named revision and is recorded above as such.
+2. **The x86_64 macOS archive cannot be attributed to a committed recipe.**
+   `recipes/cef/macos/` first appears at `44f2099` (2026-10-26, #17) and was
+   revised at `5d80772` (#18). The arm64 build's log environment matches
+   `44f2099`, and both archives were packed before #18 merged — yet the x86_64
+   log prints `CEF_ENABLE_AMD64=1` and `GN_OUT_CONFIGS=Release_GN_x64`, exports
+   that only appear in the recipe at `5d80772`. That run therefore used
+   pre-merge (uncommitted) script content. The arm64 archive is attributed to
+   `44f2099`; the x86_64 archive is recorded against `44f2099` as the closest
+   named revision with that caveat.
 3. **No published archive carries a patch from a branch of this repository.**
    Every recipe calls `automate-git.py` and nothing else. If the OBS-specific
    patches that this fork exists for must be present in the shipped CEF, the

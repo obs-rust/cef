@@ -1,0 +1,77 @@
+{
+  "tag": "7871",
+  "release_title": "Prebuilt CEF 7871 binaries (mirror, not a source release)",
+  "published": "2026-10-09",
+  "kind": "prebuilt-binary-mirror",
+  "record": "provenance",
+  "source": {
+    "upstream_repo": "chromiumembedded/cef",
+    "upstream_commit": null,
+    "upstream_note": "Not recorded upstream and not knowable from this repository. These archives are byte-for-byte copies of the CEF 7871 archives obs-studio fetches from https://cdn-fastly.obsproject.com/downloads; whoever built them chose the commit.",
+    "cef_branch": "7871",
+    "chromium": "150",
+    "cef_version_string": null
+  },
+  "patch_commit": null,
+  "patch_note": "No recipe exists here and no patch from any branch of this repository is applied.",
+  "assets": [
+    {
+      "name": "cef_binary_7871_linux_x86_64.tar.xz",
+      "sha256": "8ffc64d06ea74da613eeda7f2aa5d4e98661af6fa3ed8c68724c9a6e4e89ea8e",
+      "platform": "linux",
+      "arch": "x86_64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    },
+    {
+      "name": "cef_binary_7871_linux_aarch64.tar.xz",
+      "sha256": "b05cf13b0f482e3b0149ac21268268c536d091b5e6608c742019ebd6c8e8a1e3",
+      "platform": "linux",
+      "arch": "aarch64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    },
+    {
+      "name": "cef_binary_7871_macos_x86_64.tar.xz",
+      "sha256": "980783bba509e7e79a671c29040bbe29d832a934c1368b500a17a22e076eb0f4",
+      "platform": "macos",
+      "arch": "x86_64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    },
+    {
+      "name": "cef_binary_7871_macos_arm64.tar.xz",
+      "sha256": "0343233fc462384c2f1f58a4222028bc6171f05948a822241f89df2faa7cee8d",
+      "platform": "macos",
+      "arch": "arm64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    },
+    {
+      "name": "cef_binary_7871_windows_x64.zip",
+      "sha256": "54cd191a3f56bb1f05be22b95e1fa8041061b38bd5fe94e0776fb34dd599f341",
+      "platform": "windows",
+      "arch": "x64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    },
+    {
+      "name": "cef_binary_7871_windows_arm64.zip",
+      "sha256": "3f5b604eab71baab20c08f054d68c6212d06237e172fb8d38271c2384c2eb3a6",
+      "platform": "windows",
+      "arch": "arm64",
+      "builder": "upstream OBS (mirror)",
+      "recipe": null
+    }
+  ],
+  "gaps": [
+    "No upstream CEF commit is named: the archives were not built here.",
+    "No source tarball (cef.tar.gz) is attached to this release.",
+    "Five of the six sha256s are also pinned by obs-rust/obs-studio CMakePresets.json; cef_binary_7871_linux_x86_64.tar.xz is recorded here alone, because that platform now builds from the 8078-r2 archive."
+  ],
+  "references": [
+    "https://github.com/obs-rust/cef/blob/6533-fix-stutter-and-osr-extra-info/PROVENANCE.md",
+    "https://github.com/obs-rust/obs-studio/issues/614",
+    "https://github.com/obs-rust/obs-studio/issues/2674"
+  ]
+}

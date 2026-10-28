@@ -113,6 +113,15 @@ was validated by the maintainer (obs-rust/obs-studio#2418).
   x86_64 framework, its inner binary and `libcef_sandbox.dylib` report `code
   object is not signed at all`. That asymmetry is ld64's arm64 requirement, not
   a skipped signing step.
+- Version header: `include/cef_version.h` in both archives carries
+  `CEF_SANDBOX_COMPAT_HASH ""`. That is the correct macOS header, not a value
+  that failed to bake in: `cef/BUILD.gn`'s `make_version_header` action adds
+  `--sandbox-files` only inside `if (is_win)`, `tools/make_version_header.py`
+  substitutes `""` when it is given no sandbox files, and the only consumer of a
+  non-empty value is the Windows bootstrap loader
+  (`libcef_dll/wrapper/cef_scoped_library_loader_win.cc`). The macOS sandbox is
+  `libcef_sandbox.dylib` inside the framework, which both archives carry, built
+  with `CEF_USE_SANDBOX` (obs-rust/obs-studio#2418).
 - These are the only published archives not built on obs-rust infrastructure,
   and they are pinned by hash rather than by an attested build run.
 
